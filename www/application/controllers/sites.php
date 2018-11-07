@@ -274,7 +274,8 @@ class Sites extends MY_Controller {
 	}
 
 	public function displayAll() {
-		$record_num = end($this->uri->segment_array());
+		$temp       = $this->uri->segment_array();
+		$record_num = end($temp);
 		$result     = $this->site->displayAll($record_num);
 		$nodes      = $this->genNodes($result);
 
