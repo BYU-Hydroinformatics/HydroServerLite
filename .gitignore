@@ -13,7 +13,8 @@ www/application/logs/*
 !www/application/logs/.htaccess
 /test.sublime-workspace
 
-/www/application/config/installations/default.php
+/www/application/config/installations/*.php
+!/www/application/config/installations/default.php
 
 
 #GitIgnore for docker stuff
