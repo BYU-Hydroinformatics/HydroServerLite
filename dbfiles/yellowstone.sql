@@ -3785,45 +3785,7 @@ INSERT INTO `datavalues` (`ValueID`, `DataValue`, `ValueAccuracy`, `LocalDateTim
 INSERT INTO `isometadata` (`MetadataID`, `TopicCategory`, `Title`, `Abstract`, `ProfileVersion`, `MetadataLink`) VALUES
 (10, 'environment', 'Dr. Millers Research', 'For several years Dr. Miller has been studying the trophic state of around 40 lakes in Yellowstone National Park', 'Unknown', 'NULL');
 
---
--- Dumping data for table `labmethods`
---
 
-INSERT INTO `labmethods` (`LabMethodID`, `LabName`, `LabOrganization`, `LabMethodName`, `LabMethodDescription`, `LabMethodLink`) VALUES
-(0, 'Unknown', 'Unknown', 'Unknown', 'Unknown', NULL);
-
---
--- Dumping data for table `methods`
---
-
-INSERT INTO `methods` (`MethodID`, `MethodDescription`, `MethodLink`) VALUES
-(1, 'No method specified', NULL);
-
---
--- Dumping data for table `odmversion`
---
-
-INSERT INTO `odmversion` (`VersionNumber`) VALUES
-('1.1.1');
-
---
--- Dumping data for table `qualifiers`
---
-
-INSERT INTO `qualifiers` (`QualifierID`, `QualifierCode`, `QualifierDescription`) VALUES
-(1, 'cs', 'Citizen Science');
-
---
--- Dumping data for table `qualitycontrollevels`
---
-
-INSERT INTO `qualitycontrollevels` (`QualityControlLevelID`, `QualityControlLevelCode`, `Definition`, `Explanation`) VALUES
-(-9999, '-9999', 'Unknown', 'The quality control level is unknown'),
-(0, '0', 'Raw data', 'Raw and unprocessed data and data products that have not undergone quality control.  Depending on the variable, data type, and data transmission system, raw data may be available within seconds or minutes after the measurements have been made. Examples include real time precipitation, streamflow and water quality measurements.'),
-(1, '1', 'Quality controlled data', 'Quality controlled data that have passed quality assurance procedures such as routine estimation of timing and sensor calibration or visual inspection and removal of obvious errors. An example is USGS published streamflow records following parsing through USGS quality control procedures.'),
-(2, '2', 'Derived products', 'Derived products that require scientific and technical interpretation and may include multiple-sensor data. An example is basin average precipitation derived from rain gages using an interpolation procedure.'),
-(3, '3', 'Interpreted products', 'Interpreted products that require researcher driven analysis and interpretation, model-based interpretation using other data and/or strong prior assumptions. An example is basin average precipitation derived from the combination of rain gages and radar return data.'),
-(4, '4', 'Knowledge products', 'Knowledge products that require researcher driven scientific interpretation and multidisciplinary data integration and include model-based interpretation using other data and/or strong prior assumptions. An example is percentages of old or new water in a hydrograph inferred from an isotope analysis.');
 
 --
 -- Dumping data for table `seriescatalog`
