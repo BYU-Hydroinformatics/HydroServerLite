@@ -1,19 +1,29 @@
-var map, vectorSource
+var map, vectorSource, vectorLayer
 
 const load = () => {
 	vectorSource = new ol.source.Vector({})
-
+	vectorLayer = new ol.layer.Vector({
+		style: new ol.style.Style({
+			image: new ol.style.Circle({
+				radius: 5,
+				fill: new ol.style.Fill({
+					color: 'orange'
+				})
+			})
+		}),
+		source: vectorSource,
+		zIndex: 100
+	})
 	map = new ol.Map({
 		target: 'map',
 		layers: [
-			new ol.layer.Vector({
-				source: vectorSource
-			}),
+			vectorLayer,
 			new ol.layer.Tile({
 				source: new ol.source.XYZ({
 					url:
 						'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
-				})
+				}),
+				zIndex: 0
 			})
 		],
 		view: new ol.View({
@@ -23,6 +33,7 @@ const load = () => {
 	})
 
 	loadMarkers()
+	initListeners()
 }
 
 const loadMarkers = () => {
@@ -52,15 +63,22 @@ const loadMarkers = () => {
 				// sourcename: "Dr. Millers Research "
 
 				markers = markers.map(marker => {
-					let { lat, lng, name } = marker['@attributes']
+					let { lat, lng, name, siteid, sitetype } = marker[
+						'@attributes'
+					]
 
-					let myLocation = new ol.geom.Point(
-						ol.proj.fromLonLat([lng, lat])
+					let coords = ol.proj.transform(
+						[parseFloat(lng), parseFloat(lat)],
+						'EPSG:4326',
+						'EPSG:3857'
 					)
+					let myLocation = new ol.geom.Point(coords)
 
 					return new ol.Feature({
 						name,
-						geometry: myLocation
+						geometry: myLocation,
+						siteid,
+						sitetype
 					})
 				})
 
@@ -75,4 +93,64 @@ const loadMarkers = () => {
 		.fail(err => {
 			console.log(err)
 		})
+}
+
+const initListeners = () => {
+	let popupElem = document.getElementById('popup')
+
+	let popup = new ol.Overlay({
+		element: popupElem,
+		positioning: 'bottom-center',
+		stopEvent: false
+	})
+	map.addOverlay(popup)
+
+	map.on('pointermove', function(evt) {
+		if (evt.dragging) {
+			return
+		}
+
+		let hit = this.forEachFeatureAtPixel(evt.pixel, function(
+			feature,
+			layer
+		) {
+			return true
+		})
+
+		this.getTargetElement().style.cursor = hit ? 'pointer' : ''
+	})
+
+	// display popup on click
+	map.on('singleclick', function(evt) {
+		$(popupElem).popover('destroy')
+		if (map.getTargetElement().style.cursor == 'pointer') {
+			let feature = map.forEachFeatureAtPixel(
+				evt.pixel,
+				(feature, layer) => feature
+			)
+
+			if (feature) {
+				let geometry = feature.getGeometry(),
+					coord = geometry.getCoordinates(),
+					name = feature.get('name'),
+					siteid = feature.get('siteid')
+
+				let popupContent = `<div id='menu12' style='float:left;'>
+				<b>${name}</b><br/>
+				<a href='${base_url}sites/details/${siteid}'>Click here for site details and data</a>
+				</div>`
+
+				popup.setPosition(coord)
+				$(popupElem).popover({
+					placement: 'top',
+					html: true,
+					content: popupContent
+				})
+				$(popupElem).popover('show')
+			} else {
+				$(popupElem).popover('destroy')
+				popup.setPosition(undefined)
+			}
+		}
+	})
 }

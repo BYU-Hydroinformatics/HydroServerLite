@@ -11,6 +11,7 @@ HTML_Render_Body_Start();
     <div id="mapOuter" style="width:100%; height:875px;">
         <div id="mapContainer" style="width:100%;">
             <div id="map" style="width:100%; height:100%;"> </div>
+            <div id="popup"></div>
         </div>
         <div>
             <!-- <div id="mapFilters">
