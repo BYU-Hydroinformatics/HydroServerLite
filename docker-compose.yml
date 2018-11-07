@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  webserver:
+    build: 
+      context: ./docker/webserver
+    container_name: 'webserver'
+    restart: 'always'
+    ports:
+      - "80:80"
+      - "443:443"
+    links: 
+      - mysql
+    volumes: 
+      - ./www:/var/www/html
+      - ./docker/webserver/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/webserver/vhosts:/etc/apache2/sites-enabled
+      - ./docker/logs/apache2:/var/log/apache2
+  mysql:
+    build: ./docker/mysql
+    container_name: 'mysql'
+    restart: 'always'
+    ports:
+      - "3306:3306"
+    volumes: 
+      - ./docker/mysql/datadir:/var/lib/mysql
+      - ./docker/logs/mysql:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'sc-phpmyadmin'
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - '8080:80'
+    volumes: 
+      - /sessions
