@@ -28,7 +28,8 @@ class Sites extends MY_Controller {
 	}
 
 	public function details() {
-		$siteid = end($this->uri->segment_array());
+		$temp   = $this->uri->segment_array();
+		$siteid = end($temp);
 		if ($siteid == "details") {
 			$data['errorMsg'] = "One of the parameters: SiteID is not defined. An example request would be details/1";
 			$this->load->view('templates/apierror', $data);
@@ -319,7 +320,8 @@ class Sites extends MY_Controller {
 	}
 
 	public function delete() {
-		$siteid = end($this->uri->segment_array());
+		$temp   = $this->uri->segment_array();
+		$siteid = end($temp);
 		if ($siteid == "delete") {
 			$data['errorMsg'] = "One of the parameters: siteid is not defined. An example request would be delete/1";
 			$this->load->view('templates/apierror', $data);
